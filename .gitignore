@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+*credentials*
+*secrets*
+*.key
+*.p12
+*.pfx
+
+# Private certificates
+*.pem
+
+# Generated reports
+automation/reports/
+automation/*.csv
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+*.bak
