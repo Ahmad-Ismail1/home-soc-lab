@@ -56,6 +56,7 @@ The scheduled task was used solely for authorized detection testing.
 - Process referenced in TaskContent: cmd.exe
 - Elastic Security alerts: 1
 - Kibana case status: Closed
+![Scheduled Task Creation - Elastic Security Investigation](incident-3-scheduled-task.png)
 
 ## Remediation and Cleanup
 
