@@ -1,37 +1,67 @@
-# Incident 2 — Encoded PowerShell Execution
+# Incident 02 — Encoded PowerShell Execution
 
 ## Incident Summary
 
-This incident documents a controlled PowerShell execution simulation performed on WIN01 within my isolated Home SOC Lab.
+A controlled encoded PowerShell execution was performed on WIN01 to test whether Elastic Security could detect potentially suspicious PowerShell command-line arguments.
 
-The objective was to execute a harmless Base64-encoded PowerShell command, collect the resulting process execution telemetry, detect the activity using Elastic Security, and investigate the generated alert.
+## Environment
 
-**Incident status:** Closed  
-**Classification:** Benign Positive — Authorized Security Testing  
-**Alert severity:** Medium  
-**Risk score:** 47  
-**Alerts attached to case:** 1  
-**MITRE ATT&CK:** T1059.001 — PowerShell
+- Endpoint: WIN01 (192.168.100.20)
+- SIEM: Elastic Security
+- Telemetry: Sysmon Event ID 1 (Process Creation)
+- MITRE ATT&CK: T1059.001 — PowerShell
 
-## Affected Systems
+## Test Execution
 
-| System | Role | Lab IP |
-|---|---|---|
-| WIN01 | Windows endpoint | 192.168.100.20 |
-| SOC-ELK | Elasticsearch and Kibana | 192.168.100.10 |
+A harmless PowerShell command was encoded using Base64 and executed using the `-enco` parameter.
 
-## Attack Simulation
+Original command:
 
-A harmless PowerShell command was encoded using Base64 and executed through PowerShell's encoded-command functionality.
+```powershell
+Write-Output "SOC-PHASE24-INCIDENT2"
+```
 
-The command's intended behavior was to print the following test string:
+The test generated process creation telemetry without performing any malicious action.
 
-`SOC-PHASE24-INCIDENT2`
+## Detection
 
-No malicious payload or persistence mechanism was involved.
+- Detection rule: Encoded PowerShell Command Execution
+- Severity: Medium
+- Risk score: 47
+- Alerts generated: 1
 
-## Detection and Telemetry
+## Investigation Process
 
-The simulation generated process execution telemetry recorded through Sysmon Event ID **1 (Process Creation)**.
+1. Executed the authorized encoded PowerShell test on WIN01.
+2. Searched for Sysmon Event ID 1 in Kibana Discover.
+3. Reviewed the PowerShell process command line.
+4. Confirmed the encoded-command argument was present.
+5. Verified that the Elastic Security detection rule generated an alert.
+6. Created the Kibana case `PHASE24 - Incident 2 - Encoded PowerShell Execution`.
+7. Attached the detection alert and documented the investigation.
+8. Closed the case after confirming the activity was an authorized simulation.
 
-An Elastic Security detection rule named **Encoded PowerShell Command Execution** identified the suspicious command-line
+## Findings
+
+The detection successfully identified the encoded PowerShell execution. Encoded command-line arguments may warrant investigation because they can obscure command contents, but they are not inherently malicious.
+
+## Resolution
+
+- Classification: Benign Positive — authorized security simulation
+- Case status: Closed
+- Confirmed malicious activity: None
+
+## Lessons Learned
+
+- Sysmon Event ID 1 provides process creation telemetry.
+- PowerShell command-line arguments are useful investigation evidence.
+- Base64 encoding alone does not establish malicious intent.
+- SOC analysts must validate alerts using endpoint context and supporting logs.
+
+## Conclusion
+
+The test demonstrated that Elastic Security detected the simulated encoded PowerShell execution and supported the complete alert investigation and case closure workflow.
+
+## Investigation Screenshot
+
+![Encoded PowerShell Investigation — Elastic Security](incident-2-encoded-powershell.png)
